@@ -1,3 +1,6 @@
+/*
+
+
 import React, { useEffect, useRef, useState } from "react";
 import "./MessageList.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -61,6 +64,54 @@ const MessageList = ({ messages }) => {
         return (
           <div key={messageId} className="message">
             <i className={`icon ${userIcon}`}></i>
+            <div className="message-content">
+              <p className="text">{text}</p>
+              <span className="timestamp">{timestamp}</span>
+            </div>
+          </div>
+        );
+      })}
+      <div ref={messagesEndRef} />
+    </div>
+  );
+};
+
+export default MessageList;
+
+
+
+
+*/
+
+import React, { useEffect, useRef } from "react";
+import "./MessageList.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
+const MessageList = ({ messages, userIcons }) => {
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  return (
+    <div className="message-list">
+      {messages.map((message) => {
+        const { senderId, id, text, timestamp } = message;
+        const messageId = id || timestamp;
+        if (!messageId) {
+          console.error("Message without ID:", message);
+        }
+
+        const userIcon = userIcons[senderId] || "fas fa-question"; // Default icon if not found
+
+        return (
+          <div key={messageId} className="message">
+            <i className={`icon ${userIcon}`} title={userIcon}></i>
             <div className="message-content">
               <p className="text">{text}</p>
               <span className="timestamp">{timestamp}</span>
